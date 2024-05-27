@@ -1,6 +1,6 @@
 # EDGAR Financial Statement Retrieval and Analysis
 
-This Python script allows you to retrieve financial statements (Income Statement, Balance Sheet, and Cash Flow Statement) from the SEC's EDGAR database for a specified company and filing type (10-K or 10-Q). It provides functionality to export the financial statements as CSV files and combines the exported CSV files into a single JSON file for further analysis.
+This Python script enables users to easily retrieve and analyze financial statements (Income Statement, Balance Sheet, and Cash Flow Statement) from the SEC's EDGAR database for a specified company and filing type (10-K or 10-Q). The script offers features for exporting these statements as CSV files and combining them into a single JSON file for streamlined analysis. Ideal for investors, analysts, and researchers, this tool simplifies financial data extraction and organization.
 
 ## Features
 
@@ -53,5 +53,14 @@ DataFrame exported as Apple Inc._cash_flow_statement_2022.csv
 Combined JSON data exported as Apple Inc._combined_financial_data.json
 ```
 
+## Credits
+
+This project utilizes the edgartools package developed by dgunning. Special thanks to [dgunning](https://github.com/dgunning/edgartools) for providing this useful tool for accessing EDGAR data.
+
+## Project Goal
+
+The ultimate goal of this project is to create a Retrieval-Augmented Generation (RAG) solution that pulls relevant company financials in a useful format for similarity search (JSON, CSV). This data will be combined with the business acumen of popular investors, both past and present, to provide insights for inference. The vision is to develop an LLM-driven financial advisor that leverages comprehensive data analysis and expert knowledge. Maybe not the most novel idea at this point, but we learn by doing after all.
+
 ## License
-*This project is licensed under the MIT License.*
+
+This project is licensed under the MIT License.

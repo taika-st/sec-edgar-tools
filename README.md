@@ -53,5 +53,5 @@ DataFrame exported as Apple Inc._cash_flow_statement_2022.csv
 Combined JSON data exported as Apple Inc._combined_financial_data.json
 ```
 
-##License
-This project is licensed under the MIT License.
+## License
+*This project is licensed under the MIT License.*

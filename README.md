@@ -24,7 +24,7 @@ This Python script allows you to retrieve financial statements (Income Statement
 
 ## Example
 
-```bash
+```text
 $ python financial_statement_retrieval.py
 
 Enter the stock ticker: AAPL

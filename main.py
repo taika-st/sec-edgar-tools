@@ -156,29 +156,54 @@ def get_company_filings():
         print(
             f"Error occurred while processing {filing_type} filing #{i + 1}: {e}"
         )
+    return company.name
   except Exception as e:
     print(f"An error occurred: {e}")
 
 
+import re
+from datetime import datetime
+
+
 def combine_csv_to_json(csv_files, company_name):
   """
-  Combines the data from multiple CSV files into a single JSON file.
+    Combines the data from multiple CSV files into a single JSON file.
 
-  Args:
-      csv_files (list): A list of CSV file names to be combined.
-      company_name (str): The name of the company.
-  """
+    Args:
+        csv_files (list): A list of CSV file names to be combined.
+        company_name (str): The name of the company.
+    """
   data = []
   for file_name in csv_files:
     if os.path.exists(file_name):
       with open(file_name, 'r') as file:
         csv_reader = csv.DictReader(file)
         for row in csv_reader:
-          data.append(row)
+          fact = row.get('Fact')
+          label = row.get('Label')
+          existing_entry = next(
+              (entry for entry in data
+               if entry.get('Fact') == fact and entry.get('Label') == label),
+              None)
+          if existing_entry:
+            existing_entry.update({
+                k: v
+                for k, v in row.items()
+                if k not in ['Fact', 'Label'] and k not in existing_entry
+            })
+          else:
+            data.append(row)
     else:
       print(f"File not found: {file_name}")
 
-  json_data = json.dumps(data, indent=2)
+  for entry in data:
+    date_keys = [k for k in entry.keys() if re.match(r'\d{4}-\d{2}-\d{2}', k)]
+    date_keys.sort(key=lambda x: datetime.strptime(x, '%Y-%m-%d'),
+                   reverse=True)
+    entry.update({k: entry.pop(k) for k in date_keys})
+
+  json_data = {"Company": company_name, "Data": data}
+  json_data = json.dumps(json_data, indent=2)
 
   # Export the JSON data to a file with the company name
   json_filename = f"{company_name}_combined_financial_data.json"
@@ -196,14 +221,14 @@ def main():
   # Set the identity for EDGAR
   set_identity(os.environ['EDGAR_IDENTITY'])
 
-  get_company_filings()
+  company_name = get_company_filings()
 
   # Get the list of exported CSV files
   csv_files = glob.glob("*.csv")
 
   if csv_files:
     # Combine the exported CSV files into a JSON file
-    combine_csv_to_json(csv_files, company.name)
+    combine_csv_to_json(csv_files, company_name)
   else:
     print("No exported CSV files found.")
 
